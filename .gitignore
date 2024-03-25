@@ -1,0 +1,8 @@
+# node
+node_modules
+
+# config and sensitive data
+.env
+
+# build output
+dist
