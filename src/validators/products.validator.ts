@@ -10,11 +10,29 @@ function validateProductFields(product: Omit<Product, 'id'>): string[] {
     quantity: VALIDATION_RULES.product.quantity
   })
 
-  const { error } = schema.validate(product, { abortEarly: false })
+  const { error } = schema.validate(product, { abortEarly: false, convert: false })
+
+  return error?.details.map(error => error.message) || []
+}
+
+function validateProductPrice(price: number): string[] {
+  const schema = VALIDATION_RULES.product.price
+
+  const { error } = schema.validate(price, { abortEarly: false, convert: false })
+
+  return error?.details.map(error => error.message) || []
+}
+
+function validateProductQuantity(quantity: number): string[] {
+  const schema = VALIDATION_RULES.product.quantity
+
+  const { error } = schema.validate(quantity, { abortEarly: false, convert: false })
 
   return error?.details.map(error => error.message) || []
 }
 
 export const productsValidator = {
-  validateProductFields
+  validateProductFields,
+  validateProductPrice,
+  validateProductQuantity
 }

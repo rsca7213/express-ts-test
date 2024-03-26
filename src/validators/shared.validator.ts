@@ -3,7 +3,7 @@ import { VALIDATION_RULES } from '../constants/validation.constants'
 function validateId(id: number): string[] {
   const schema = VALIDATION_RULES.id
 
-  const { error } = schema.validate(id, { abortEarly: false })
+  const { error } = schema.validate(id, { abortEarly: false, convert: false })
 
   return error?.details.map(error => error.message) || []
 }

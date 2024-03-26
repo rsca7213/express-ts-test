@@ -12,7 +12,7 @@ function validateUserFieldsWithPassword(user: Omit<User, 'id'>, password: string
     password: VALIDATION_RULES.user.password
   })
 
-  const { error } = schema.validate({ ...user, password }, { abortEarly: false })
+  const { error } = schema.validate({ ...user, password }, { abortEarly: false, convert: false })
 
   return error?.details.map(error => error.message) || []
 }
@@ -26,7 +26,7 @@ function validateUserFieldsWithoutPassword(user: Omit<User, 'id'>): string[] {
     passwordHash: Joi.string().optional().empty('')
   })
 
-  const { error } = schema.validate(user, { abortEarly: false })
+  const { error } = schema.validate(user, { abortEarly: false, convert: false })
 
   return error?.details.map(error => error.message) || []
 }
