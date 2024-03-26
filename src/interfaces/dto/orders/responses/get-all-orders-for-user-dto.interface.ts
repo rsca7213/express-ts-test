@@ -1,4 +1,4 @@
-import { OrderStatus } from '../../../types/order.types'
+import { OrderStatus } from '../../../../types/order.types'
 
 export interface GetAllOrdersForUserResponseDto {
   orders: {

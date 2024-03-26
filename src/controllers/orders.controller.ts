@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from 'express'
 import { ordersService } from '../services/orders.service'
 import { ApiRequest } from '../interfaces/api/request.interface'
-import { CreateOrderRequestDto } from '../interfaces/dto/orders/create-order-dto.interface'
-import { UpdateOrderStatusRequestDto } from '../interfaces/dto/orders/update-order-status-dto.interface'
-import { GetAllOrdersForCurrentUserResponseDto } from '../interfaces/dto/orders/get-all-orders-for-current-user-dto.interface'
-import { GetOrderResponseDto } from '../interfaces/dto/orders/get-order-dto.interface'
-import { GetAllOrdersForUserResponseDto } from '../interfaces/dto/orders/get-all-orders-for-user-dto.interface'
+import { CreateOrderRequestDto } from '../interfaces/dto/orders/requests/create-order-dto.interface'
+import { UpdateOrderStatusRequestDto } from '../interfaces/dto/orders/requests/update-order-status-dto.interface'
+import { GetAllOrdersForCurrentUserResponseDto } from '../interfaces/dto/orders/responses/get-all-orders-for-current-user-dto.interface'
+import { GetOrderResponseDto } from '../interfaces/dto/orders/requests/get-order-dto.interface'
+import { GetAllOrdersForUserResponseDto } from '../interfaces/dto/orders/responses/get-all-orders-for-user-dto.interface'
 
 async function getAllOrdersForCurrentUser(req: Request, res: Response, next: NextFunction) {
   const page = Number(req.query.page)

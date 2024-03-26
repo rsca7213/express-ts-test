@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from 'express'
-import { CreateProductRequestDto } from '../interfaces/dto/products/create-product-dto.interface'
+import { CreateProductRequestDto } from '../interfaces/dto/products/requests/create-product-dto.interface'
 import { productsService } from '../services/products.service'
-import { UpdateProductRequestDto } from '../interfaces/dto/products/update-product-dto.interface'
-import { UpdateProductQuantityRequestDto } from '../interfaces/dto/products/update-product-quantity-dto.interface'
-import { UpdateProductPriceRequestDto } from '../interfaces/dto/products/update-product-price-dto.interface'
+import { UpdateProductRequestDto } from '../interfaces/dto/products/requests/update-product-dto.interface'
+import { UpdateProductQuantityRequestDto } from '../interfaces/dto/products/requests/update-product-quantity-dto.interface'
+import { UpdateProductPriceRequestDto } from '../interfaces/dto/products/requests/update-product-price-dto.interface'
 import { ApiRequest } from '../interfaces/api/request.interface'
-import { GetAllProductsResponseDto } from '../interfaces/dto/products/get-all-products-dto.interface'
-import { GetProductResponseDto } from '../interfaces/dto/products/get-product-dto.interface'
+import { GetAllProductsResponseDto } from '../interfaces/dto/products/responses/get-all-products-dto.interface'
+import { GetProductResponseDto } from '../interfaces/dto/products/responses/get-product-dto.interface'
 
 async function getAllProducts(req: Request, res: Response, next: NextFunction) {
   const page = Number(req.query.page)

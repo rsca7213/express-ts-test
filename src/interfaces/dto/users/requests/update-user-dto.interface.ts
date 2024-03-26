@@ -1,4 +1,4 @@
-import { UserRole } from '../../../types/user.types'
+import { UserRole } from '../../../../types/user.types'
 
 export interface UpdateUserRequestDto {
   firstName: string

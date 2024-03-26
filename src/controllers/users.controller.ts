@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express'
 import { usersService } from '../services/users.service'
 import { ApiRequest } from '../interfaces/api/request.interface'
-import { CreateUserRequestDto } from '../interfaces/dto/users/create-user-dto.interface'
-import { GetUserResponseDto } from '../interfaces/dto/users/get-user-dto.interface'
-import { GetAllUsersResponseDto } from '../interfaces/dto/users/get-all-users-dto.interface'
+import { CreateUserRequestDto } from '../interfaces/dto/users/requests/create-user-dto.interface'
+import { GetUserResponseDto } from '../interfaces/dto/users/responses/get-user-dto.interface'
+import { GetAllUsersResponseDto } from '../interfaces/dto/users/responses/get-all-users-dto.interface'
 
 async function getAllUsers(req: Request, res: Response, next: NextFunction) {
   const page = Number(req.query.page)

@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
 import { ApiRequest } from '../interfaces/api/request.interface'
-import { LoginRequestDto } from '../interfaces/dto/auth/login-dto.interface'
+import { LoginRequestDto } from '../interfaces/dto/auth/requests/login-dto.interface'
 import { authService } from '../services/auth.service'
-import { RegisterUserRequestDto } from '../interfaces/dto/auth/register-user-dto.interface'
+import { RegisterUserRequestDto } from '../interfaces/dto/auth/requests/register-user-dto.interface'
 
 async function login(req: Request, res: Response, next: NextFunction) {
   const body: ApiRequest<LoginRequestDto> = req.body
