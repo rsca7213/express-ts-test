@@ -9,15 +9,15 @@ export const orderRouter = Router()
 // Before route middlewares
 orderRouter.use(authMiddleware)
 
-orderRouter.get('', paginationMiddleware, ordersController.getAllOrders)
-orderRouter.get(':id', ordersController.getOrderById)
-orderRouter.post('', ordersController.createOrder)
+orderRouter.get('/', paginationMiddleware, ordersController.getAllOrdersForCurrentUser)
+orderRouter.get('/:id', ordersController.getOrderById)
+orderRouter.post('/', ordersController.createOrder)
 orderRouter.get(
   '/user/:id',
   paginationMiddleware,
   adminOnlyMiddleware,
   ordersController.getAllOrdersByUserId
 )
-orderRouter.put(':id', adminOnlyMiddleware, ordersController.updateOrder)
-orderRouter.delete(':id', adminOnlyMiddleware, ordersController.deleteOrder)
-orderRouter.patch(':id/status', adminOnlyMiddleware, ordersController.updateOrderStatus)
+orderRouter.put('/:id', adminOnlyMiddleware, ordersController.updateOrder)
+orderRouter.delete('/:id', adminOnlyMiddleware, ordersController.deleteOrder)
+orderRouter.patch('/:id/status', adminOnlyMiddleware, ordersController.updateOrderStatus)
