@@ -5,7 +5,7 @@ export interface Order {
   id: number
   userId: number
   status: OrderStatus
-  products: OrderProduct[]
+  orderProducts: OrderProduct[]
   orderDate: Date
   lastUpdate: Date
 }

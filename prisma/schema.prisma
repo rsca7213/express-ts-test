@@ -23,17 +23,17 @@ model Product {
   price        Float
   description  String
   quantity     Int
-  OrderProduct OrderProduct[]
+  orderProduct OrderProduct[]
 }
 
 model Order {
-  id           Int            @id @default(autoincrement())
-  userId       Int
-  status       String
-  user         User           @relation(fields: [userId], references: [id])
-  orderDate    DateTime
-  lastUpdate   DateTime
-  OrderProduct OrderProduct[]
+  id            Int            @id @default(autoincrement())
+  userId        Int
+  status        String
+  user          User           @relation(fields: [userId], references: [id])
+  orderDate     DateTime
+  lastUpdate    DateTime
+  orderProducts OrderProduct[]
 }
 
 model OrderProduct {
