@@ -19,6 +19,20 @@ async function getAll(): Promise<User[]> {
   })
 }
 
+async function getRange(skip: number, take: number): Promise<User[]> {
+  const pUsers = await prisma.user.findMany({
+    skip,
+    take
+  })
+
+  return pUsers.map(pUser => {
+    return {
+      ...pUser,
+      role: pUser.role as UserRole
+    }
+  })
+}
+
 async function getById(id: number): Promise<User | null> {
   const pUser = await prisma.user.findUnique({
     where: {
@@ -95,6 +109,7 @@ async function removeById(id: number): Promise<void> {
 export const usersRepository = {
   count,
   getAll,
+  getRange,
   getById,
   getByEmail,
   existsById,

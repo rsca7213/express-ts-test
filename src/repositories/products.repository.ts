@@ -11,6 +11,13 @@ async function getAll(): Promise<Product[]> {
   return await prisma.product.findMany()
 }
 
+async function getRange(skip: number, take: number): Promise<Product[]> {
+  return await prisma.product.findMany({
+    skip,
+    take
+  })
+}
+
 async function getById(id: number): Promise<Product | null> {
   return await prisma.product.findUnique({
     where: {
@@ -95,6 +102,7 @@ async function updatePriceById(id: number, price: number): Promise<void> {
 export const productsRepository = {
   count,
   getAll,
+  getRange,
   getById,
   getByName,
   existsById,

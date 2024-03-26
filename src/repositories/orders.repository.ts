@@ -31,11 +31,48 @@ async function getAll(): Promise<Order[]> {
   })
 }
 
+async function getRange(skip: number, take: number): Promise<Order[]> {
+  const pOrders = await prisma.order.findMany({
+    skip,
+    take,
+    include: {
+      orderProducts: true
+    }
+  })
+
+  return pOrders.map(pOrder => {
+    return {
+      ...pOrder,
+      status: pOrder.status as OrderStatus
+    }
+  })
+}
+
 async function getAllByUserId(userId: number): Promise<Order[]> {
   const pOrders = await prisma.order.findMany({
     where: {
       userId
     },
+    include: {
+      orderProducts: true
+    }
+  })
+
+  return pOrders.map(pOrder => {
+    return {
+      ...pOrder,
+      status: pOrder.status as OrderStatus
+    }
+  })
+}
+
+async function getRangeByUserId(userId: number, skip: number, take: number): Promise<Order[]> {
+  const pOrders = await prisma.order.findMany({
+    where: {
+      userId
+    },
+    skip,
+    take,
     include: {
       orderProducts: true
     }
@@ -132,7 +169,9 @@ export const ordersRepository = {
   count,
   countByUserId,
   getAll,
+  getRange,
   getAllByUserId,
+  getRangeByUserId,
   getById,
   existsById,
   create,
