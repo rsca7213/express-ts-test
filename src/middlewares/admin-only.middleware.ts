@@ -12,6 +12,7 @@ export function adminOnlyMiddleware<ReqBody, ResBody>(
   if (req.body.authUser.role === 'Administrator') return next()
 
   return res.status(HttpCodes.FORBIDDEN).json({
+    success: false,
     message: 'This request is invalid because the user is not allowed to perform this action',
     error: 'The user is not allowed to perform this action',
     details: []

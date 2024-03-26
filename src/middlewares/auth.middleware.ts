@@ -17,6 +17,7 @@ export async function authMiddleware<ReqBody, ResBody>(
 
   if (!token) {
     return res.status(HttpCodes.UNAUTHORIZED).json({
+      success: false,
       message: 'This request is invalid because it requires an authorization token',
       error: 'No authorization token was provided',
       details: []
@@ -27,6 +28,7 @@ export async function authMiddleware<ReqBody, ResBody>(
     user = authTokenUtil.verifyToken(token)
   } catch {
     return res.status(HttpCodes.UNAUTHORIZED).json({
+      success: false,
       message: 'This request is invalid because the authorization token is invalid',
       error: 'The authorization token was invalid',
       details: []
@@ -37,6 +39,7 @@ export async function authMiddleware<ReqBody, ResBody>(
 
   if (!doesUserExist) {
     return res.status(HttpCodes.UNAUTHORIZED).json({
+      success: false,
       message: 'This request is invalid because the user does not exist',
       error: 'The user does not exist',
       details: []
