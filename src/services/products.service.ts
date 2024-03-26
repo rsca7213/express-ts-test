@@ -75,9 +75,16 @@ async function createProduct(product: Omit<Product, 'id'>): Promise<ServiceResul
     }
   }
 
+  const productToSave: Omit<Product, 'id'> = {
+    name: product.name,
+    description: product.description,
+    price: product.price,
+    quantity: product.quantity
+  }
+
   // Create product
   try {
-    await productsRepository.create(product)
+    await productsRepository.create(productToSave)
   } catch {
     return {
       success: false,
@@ -141,9 +148,16 @@ async function updateProductById(
     }
   }
 
+  const productToSave: Omit<Product, 'id'> = {
+    name: product.name,
+    description: product.description,
+    price: product.price,
+    quantity: product.quantity
+  }
+
   // Update product
   try {
-    await productsRepository.updateById(id, product)
+    await productsRepository.updateById(id, productToSave)
   } catch {
     return {
       success: false,
