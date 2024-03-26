@@ -17,9 +17,14 @@ async function countByUserId(userId: number): Promise<number> {
 }
 
 async function getAll(): Promise<Order[]> {
+  // include orderProducts and include products inside orderProducts
   const pOrders = await prisma.order.findMany({
     include: {
-      orderProducts: true
+      orderProducts: {
+        include: {
+          product: true
+        }
+      }
     }
   })
 
@@ -36,7 +41,11 @@ async function getRange(skip: number, take: number): Promise<Order[]> {
     skip,
     take,
     include: {
-      orderProducts: true
+      orderProducts: {
+        include: {
+          product: true
+        }
+      }
     }
   })
 
@@ -54,7 +63,11 @@ async function getAllByUserId(userId: number): Promise<Order[]> {
       userId
     },
     include: {
-      orderProducts: true
+      orderProducts: {
+        include: {
+          product: true
+        }
+      }
     }
   })
 
@@ -74,7 +87,11 @@ async function getRangeByUserId(userId: number, skip: number, take: number): Pro
     skip,
     take,
     include: {
-      orderProducts: true
+      orderProducts: {
+        include: {
+          product: true
+        }
+      }
     }
   })
 
@@ -92,7 +109,11 @@ async function getById(id: number): Promise<Order | null> {
       id
     },
     include: {
-      orderProducts: true
+      orderProducts: {
+        include: {
+          product: true
+        }
+      }
     }
   })
 
