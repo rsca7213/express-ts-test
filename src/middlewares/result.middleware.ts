@@ -46,7 +46,24 @@ export function resultMiddleware<ReqBody, ResBody>(
         details: serviceResult.errors
       })
       break
-    default:
+    case 'AUTHENTICATION':
+      res.status(HttpCodes.UNAUTHORIZED).json({
+        success: false,
+        message: 'This request is invalid because authentication is required',
+        error: serviceResult.message,
+        details: serviceResult.errors
+      })
+      break
+    case 'INSUFFICIENT_ITEMS':
+      res.status(HttpCodes.BAD_REQUEST).json({
+        success: false,
+        message:
+          'This request is invalid because insufficient items caused the request to not be fulfilled',
+        error: serviceResult.message,
+        details: serviceResult.errors
+      })
+      break
+    default: // UNEXPECTED
       res.status(HttpCodes.INTERNAL_SERVER_ERROR).json({
         success: false,
         message: 'An unexpected error has occurred while processing this request',
