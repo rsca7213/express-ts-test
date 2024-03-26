@@ -1,6 +1,7 @@
 import express, { Application } from 'express'
 import dotenv from 'dotenv'
 import { appConfig, setupAppConfig } from './config/app.config'
+import { router } from './routes/routes'
 
 // Load environment variables
 dotenv.config()
@@ -11,6 +12,7 @@ const app: Application = express()
 app.use(express.json())
 
 // Routing
+app.use('/api', router)
 
 // Start Express.js Server
 app.listen(appConfig.port, () => {
