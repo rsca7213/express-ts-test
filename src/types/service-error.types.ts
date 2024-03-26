@@ -4,3 +4,4 @@ export type ServiceError =
   | 'ALREADY_EXISTS'
   | 'VALIDATION'
   | 'AUTHENTICATION'
+  | 'INSUFFICIENT_ITEMS'

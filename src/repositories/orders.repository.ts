@@ -135,10 +135,9 @@ async function existsById(id: number): Promise<boolean> {
   )
 }
 
-async function create(order: Order): Promise<void> {
+async function create(order: Omit<Order, 'id'>): Promise<void> {
   await prisma.order.create({
     data: {
-      id: order.id,
       userId: order.userId,
       status: order.status,
       orderProducts: {
@@ -150,7 +149,7 @@ async function create(order: Order): Promise<void> {
   })
 }
 
-async function updateById(id: number, order: Order): Promise<void> {
+async function updateById(id: number, order: Omit<Order, 'id'>): Promise<void> {
   await prisma.order.update({
     where: {
       id
@@ -168,6 +167,11 @@ async function updateById(id: number, order: Order): Promise<void> {
 }
 
 async function removeById(id: number): Promise<void> {
+  await prisma.orderProduct.deleteMany({
+    where: {
+      orderId: id
+    }
+  })
   await prisma.order.delete({
     where: {
       id

@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import { HttpCodes } from '../types/http-codes.types'
 import { ordersService } from '../services/orders.service'
 import { ApiRequest } from '../interfaces/api/request.interface'
+import { CreateOrderRequestDto } from '../interfaces/dto/orders/create-order-dto.interface'
 
 async function getAllOrdersForCurrentUser(req: Request, res: Response, next: NextFunction) {
   const page = Number(req.query.page)
@@ -28,8 +29,9 @@ async function getAllOrdersByUserId(req: Request, res: Response, next: NextFunct
 }
 
 async function createOrder(req: Request, res: Response, next: NextFunction) {
-  res.status(HttpCodes.NOT_IMPLEMENTED).send()
-  return next()
+  const body: ApiRequest<CreateOrderRequestDto> = req.body
+  const serviceResult = await ordersService.createOrder(body.data.products, body.authUser)
+  return next(serviceResult)
 }
 
 async function updateOrder(req: Request, res: Response, next: NextFunction) {
@@ -38,8 +40,9 @@ async function updateOrder(req: Request, res: Response, next: NextFunction) {
 }
 
 async function deleteOrder(req: Request, res: Response, next: NextFunction) {
-  res.status(HttpCodes.NOT_IMPLEMENTED).send()
-  return next()
+  const id = Number(req.params.id)
+  const serviceResult = await ordersService.deleteOrder(id)
+  return next(serviceResult)
 }
 
 async function updateOrderStatus(req: Request, res: Response, next: NextFunction) {

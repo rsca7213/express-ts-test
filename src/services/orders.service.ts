@@ -2,7 +2,9 @@ import { ServiceResult } from '../interfaces/services/service-result.interface'
 import { AuthUser } from '../models/auth-user.model'
 import { Order } from '../models/order.model'
 import { ordersRepository } from '../repositories/orders.repository'
+import { productsRepository } from '../repositories/products.repository'
 import { usersRepository } from '../repositories/users.repository'
+import { productsValidator } from '../validators/products.validator'
 import { sharedValidator } from '../validators/shared.validator'
 
 async function getAllOrdersForCurrentUser(
@@ -144,8 +146,172 @@ async function getOrderById(id: number): Promise<ServiceResult<Order | null>> {
   }
 }
 
+async function createOrder(
+  products: {
+    id: number
+    quantity: number
+  }[],
+  authUser: AuthUser
+): Promise<ServiceResult<void>> {
+  // Validation
+  const errors: string[] = []
+
+  if (!Array.isArray(products) || products.length === 0)
+    return {
+      success: false,
+      data: undefined,
+      errors: ['Products array is empty or missing'],
+      errorType: 'VALIDATION',
+      message: 'Order could not be created due to validation errors'
+    }
+
+  products.forEach(product => {
+    errors.push(...sharedValidator.validateId(product.id))
+    errors.push(...productsValidator.validateProductQuantity(product.quantity))
+  })
+
+  if (errors.length) {
+    return {
+      success: false,
+      errors,
+      data: undefined,
+      errorType: 'VALIDATION',
+      message: 'Order could not be created due to validation errors'
+    }
+  }
+
+  // initialize products unit price
+  const productsToOrder = products.map(p => {
+    return {
+      id: p.id,
+      quantity: p.quantity,
+      stock: 0,
+      unitPrice: 0
+    }
+  })
+
+  // Verify that all products exist and have enough stock for required quantity
+  for (const productToOrder of productsToOrder) {
+    const product = await productsRepository.getById(productToOrder.id)
+
+    if (!product) {
+      return {
+        success: false,
+        data: undefined,
+        errors: [`Product with id ${productToOrder.id} not found`],
+        errorType: 'NOT_FOUND',
+        message: 'Order could not be created due to verification errors'
+      }
+    }
+
+    if (product.quantity < productToOrder.quantity) {
+      return {
+        success: false,
+        data: undefined,
+        errors: [
+          `Product with id ${productToOrder.id} does not have enough available stock (current stock = ${product.quantity})`
+        ],
+        errorType: 'INSUFFICIENT_ITEMS',
+        message: 'Order could not be created due to verification errors'
+      }
+    }
+
+    // if valid item, add unitPrice and stock to productToOrder
+    productToOrder.unitPrice = product.price
+    productToOrder.stock = product.quantity
+  }
+
+  const orderToSave = {
+    status: 'Pending',
+    userId: authUser.id,
+    orderDate: new Date(),
+    lastUpdate: new Date(),
+    orderProducts: productsToOrder.map(p => {
+      return {
+        productId: p.id,
+        quantity: p.quantity,
+        unitPrice: p.unitPrice
+      }
+    })
+  } as Omit<Order, 'id'>
+
+  // Create order
+  try {
+    await ordersRepository.create(orderToSave)
+
+    // Update product quantities
+    for (const productToOrder of productsToOrder) {
+      const remainingStock = productToOrder.stock - productToOrder.quantity
+      await productsRepository.updateQuantityById(productToOrder.id, remainingStock)
+    }
+  } catch {
+    return {
+      success: false,
+      data: undefined,
+      errors: ['Order could not be created because an unexpected error occurred'],
+      errorType: 'UNEXPECTED',
+      message: 'An error occurred while creating order'
+    }
+  }
+
+  return {
+    success: true,
+    data: undefined,
+    message: 'Order created successfully'
+  }
+}
+
+async function deleteOrder(id: number): Promise<ServiceResult<void>> {
+  // Validation
+  const errors: string[] = sharedValidator.validateId(id)
+
+  if (errors.length) {
+    return {
+      success: false,
+      data: undefined,
+      errors,
+      errorType: 'VALIDATION',
+      message: 'Order could not be deleted due to validation errors'
+    }
+  }
+
+  // Verify that order exists
+  const order = await ordersRepository.getById(id)
+
+  if (!order) {
+    return {
+      success: false,
+      data: undefined,
+      errors: ['Order not found'],
+      errorType: 'NOT_FOUND',
+      message: 'Order could not be deleted due to verification errors'
+    }
+  }
+
+  // Delete order
+  try {
+    await ordersRepository.removeById(id)
+  } catch {
+    return {
+      success: false,
+      data: undefined,
+      errors: ['Order could not be deleted because an unexpected error occurred'],
+      errorType: 'UNEXPECTED',
+      message: 'An error occurred while deleting order'
+    }
+  }
+
+  return {
+    success: true,
+    data: undefined,
+    message: 'Order deleted successfully'
+  }
+}
+
 export const ordersService = {
   getAllOrdersForCurrentUser,
   getAllOrdersByUserId,
-  getOrderById
+  getOrderById,
+  createOrder,
+  deleteOrder
 }
