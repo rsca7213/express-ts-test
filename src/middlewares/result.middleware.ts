@@ -63,6 +63,14 @@ export function resultMiddleware<ReqBody, ResBody>(
         details: serviceResult.errors
       })
       break
+    case 'CONFLICT':
+      res.status(HttpCodes.CONFLICT).json({
+        success: false,
+        message: 'This request is invalid because it conflicts with another resource',
+        error: serviceResult.message,
+        details: serviceResult.errors
+      })
+      break
     default: // UNEXPECTED
       res.status(HttpCodes.INTERNAL_SERVER_ERROR).json({
         success: false,
