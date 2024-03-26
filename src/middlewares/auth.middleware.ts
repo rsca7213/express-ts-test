@@ -5,9 +5,10 @@ import { HttpCodes } from '../types/http-codes.types'
 import { AuthUser } from '../models/auth-user.model'
 import { authTokenUtil } from '../utils/auth-token.util'
 import { usersRepository } from '../repositories/users.repository'
+import { ParamsDictionary } from 'express-serve-static-core'
 
 export async function authMiddleware<ReqBody, ResBody>(
-  req: Request<ApiRequest<ReqBody>>,
+  req: Request<ParamsDictionary, ApiResponse<ResBody>, ApiRequest<ReqBody>>,
   res: Response<ApiResponse<ResBody>>,
   next: NextFunction
 ) {

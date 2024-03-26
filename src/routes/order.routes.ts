@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { ordersController } from '../controllers/orders.controller'
 import { authMiddleware } from '../middlewares/auth.middleware'
+import { adminOnlyMiddleware } from '../middlewares/admin-only.middleware'
 
 export const orderRouter = Router()
 
@@ -9,8 +10,8 @@ orderRouter.use(authMiddleware)
 
 orderRouter.get('', ordersController.getAllOrders)
 orderRouter.get(':id', ordersController.getOrderById)
-orderRouter.get('/user/:id', ordersController.getAllOrdersByUserId)
 orderRouter.post('', ordersController.createOrder)
-orderRouter.put(':id', ordersController.updateOrder)
-orderRouter.delete(':id', ordersController.deleteOrder)
-orderRouter.patch(':id/status', ordersController.updateOrderStatus)
+orderRouter.get('/user/:id', adminOnlyMiddleware, ordersController.getAllOrdersByUserId)
+orderRouter.put(':id', adminOnlyMiddleware, ordersController.updateOrder)
+orderRouter.delete(':id', adminOnlyMiddleware, ordersController.deleteOrder)
+orderRouter.patch(':id/status', adminOnlyMiddleware, ordersController.updateOrderStatus)

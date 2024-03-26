@@ -3,10 +3,11 @@ import { ServiceResult } from '../interfaces/services/service-result.interface'
 import { HttpCodes } from '../types/http-codes.types'
 import { ApiRequest } from '../interfaces/api/request.interface'
 import { ApiResponse } from '../interfaces/api/response.interface'
+import { ParamsDictionary } from 'express-serve-static-core'
 
 export function resultMiddleware<ReqBody, ResBody>(
   serviceResult: ServiceResult<ResBody>,
-  req: Request<ApiRequest<ReqBody>>,
+  req: Request<ParamsDictionary, ApiResponse<ResBody>, ApiRequest<ReqBody>>,
   res: Response<ApiResponse<ResBody>>,
   next: NextFunction
 ) {
