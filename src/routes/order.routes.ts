@@ -10,8 +10,8 @@ export const orderRouter = Router()
 orderRouter.use(authMiddleware)
 
 orderRouter.get('/', paginationMiddleware, ordersController.getAllOrdersForCurrentUser)
-orderRouter.get('/:id', ordersController.getOrderById)
 orderRouter.post('/', ordersController.createOrder)
+orderRouter.get('/:id', adminOnlyMiddleware, ordersController.getOrderById)
 orderRouter.get(
   '/user/:id',
   paginationMiddleware,
