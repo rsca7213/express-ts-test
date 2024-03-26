@@ -54,13 +54,26 @@ async function existsByName(name: string): Promise<boolean> {
   )
 }
 
-async function create(product: Product): Promise<void> {
+async function existsByNameExcludingId(id: number, name: string): Promise<boolean> {
+  return Boolean(
+    await prisma.product.findFirst({
+      where: {
+        id: {
+          not: id
+        },
+        name
+      }
+    })
+  )
+}
+
+async function create(product: Omit<Product, 'id'>): Promise<void> {
   await prisma.product.create({
     data: product
   })
 }
 
-async function updateById(id: number, product: Product): Promise<void> {
+async function updateById(id: number, product: Omit<Product, 'id'>): Promise<void> {
   await prisma.product.update({
     where: {
       id
@@ -107,6 +120,7 @@ export const productsRepository = {
   getByName,
   existsById,
   existsByName,
+  existsByNameExcludingId,
   create,
   updateById,
   removeById,
