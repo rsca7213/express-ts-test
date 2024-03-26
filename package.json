@@ -11,5 +11,12 @@
   ],
   "main": "dist/server.js",
   "scripts": {},
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.11.30"
+  }
 }
