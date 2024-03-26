@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { usersController } from '../controllers/users.controller'
 import { authMiddleware } from '../middlewares/auth.middleware'
 import { adminOnlyMiddleware } from '../middlewares/admin-only.middleware'
+import { paginationMiddleware } from '../middlewares/pagination.middleware'
 
 export const userRouter = Router()
 
@@ -9,7 +10,7 @@ export const userRouter = Router()
 userRouter.use(authMiddleware)
 userRouter.use(adminOnlyMiddleware)
 
-userRouter.get('/', usersController.getAllUsers)
+userRouter.get('/', paginationMiddleware, usersController.getAllUsers)
 userRouter.get('/:id', usersController.getUserById)
 userRouter.post('/', usersController.createUser)
 userRouter.put('/:id', usersController.updateUser)

@@ -14,7 +14,8 @@ export function resultMiddleware<ReqBody, ResBody>(
   if (serviceResult.success) {
     res.status(HttpCodes.OK).json({
       message: serviceResult.message,
-      data: serviceResult.data
+      data: serviceResult.data,
+      pagination: serviceResult.pagination
     })
     return next()
   }

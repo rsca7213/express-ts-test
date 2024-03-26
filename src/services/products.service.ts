@@ -4,13 +4,33 @@ import { productsRepository } from '../repositories/products.repository'
 import { productsValidator } from '../validators/products.validator'
 import { sharedValidator } from '../validators/shared.validator'
 
-async function getAllProducts(): Promise<ServiceResult<Product[]>> {
-  const products = await productsRepository.getAll()
+async function getAllProducts(skip: number, limit: number): Promise<ServiceResult<Product[]>> {
+  let products: Product[]
+  let count: number
+
+  try {
+    products = await productsRepository.getRange(skip, limit)
+    count = await productsRepository.count()
+  } catch {
+    return {
+      success: false,
+      data: [],
+      errors: ['Products could not be retrieved because an unexpected error occurred'],
+      errorType: 'UNEXPECTED',
+      message: 'An error occurred while retrieving products'
+    }
+  }
 
   return {
     success: true,
     data: products,
-    message: 'Products retrieved successfully'
+    message: 'Products retrieved successfully',
+    pagination: {
+      page: Math.floor(skip / limit) + 1,
+      limit,
+      itemCount: count,
+      pageCount: Math.ceil(count / limit)
+    }
   }
 }
 
@@ -29,7 +49,19 @@ async function getProductById(id: number): Promise<ServiceResult<Product | null>
   }
 
   // Get product
-  const product = await productsRepository.getById(id)
+  let product: Product | null
+
+  try {
+    product = await productsRepository.getById(id)
+  } catch {
+    return {
+      success: false,
+      data: null,
+      errors: ['Product could not be retrieved because an unexpected error occurred'],
+      errorType: 'UNEXPECTED',
+      message: 'An error occurred while retrieving the product'
+    }
+  }
 
   if (!product) {
     return {

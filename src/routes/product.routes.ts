@@ -2,12 +2,13 @@ import { Router } from 'express'
 import { productsController } from '../controllers/products.controller'
 import { authMiddleware } from '../middlewares/auth.middleware'
 import { adminOnlyMiddleware } from '../middlewares/admin-only.middleware'
+import { paginationMiddleware } from '../middlewares/pagination.middleware'
 export const productRouter = Router()
 
 // Before route middlewares
 productRouter.use(authMiddleware)
 
-productRouter.get('/', productsController.getAllProducts)
+productRouter.get('/', paginationMiddleware, productsController.getAllProducts)
 productRouter.get('/:id', productsController.getProductById)
 productRouter.post('/', adminOnlyMiddleware, productsController.createProduct)
 productRouter.put('/:id', adminOnlyMiddleware, productsController.updateProduct)

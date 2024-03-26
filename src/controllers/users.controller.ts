@@ -4,7 +4,10 @@ import { ApiRequest } from '../interfaces/api/request.interface'
 import { CreateUserRequestDto } from '../interfaces/dto/users/create-user-dto.interface'
 
 async function getAllUsers(req: Request, res: Response, next: NextFunction) {
-  const serviceResult = await usersService.getAllUsers()
+  const page = Number(req.query.page)
+  const limit = Number(req.query.limit)
+  const skip = (page - 1) * limit
+  const serviceResult = await usersService.getAllUsers(skip, limit)
   return next(serviceResult)
 }
 

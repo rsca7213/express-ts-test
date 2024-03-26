@@ -7,7 +7,10 @@ import { UpdateProductPriceRequestDto } from '../interfaces/dto/products/update-
 import { ApiRequest } from '../interfaces/api/request.interface'
 
 async function getAllProducts(req: Request, res: Response, next: NextFunction) {
-  const serviceResult = await productsService.getAllProducts()
+  const page = Number(req.query.page)
+  const limit = Number(req.query.limit)
+  const skip = (page - 1) * limit
+  const serviceResult = await productsService.getAllProducts(skip, limit)
   return next(serviceResult)
 }
 

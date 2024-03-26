@@ -5,13 +5,33 @@ import { passwordHashingUtil } from '../utils/password-hashing.util'
 import { sharedValidator } from '../validators/shared.validator'
 import { usersValidator } from '../validators/users.validator'
 
-async function getAllUsers(): Promise<ServiceResult<User[]>> {
-  const users = await usersRepository.getAll()
+async function getAllUsers(skip: number, limit: number): Promise<ServiceResult<User[]>> {
+  let users: User[]
+  let count: number
+
+  try {
+    users = await usersRepository.getRange(skip, limit)
+    count = await usersRepository.count()
+  } catch {
+    return {
+      success: false,
+      data: [],
+      errors: ['Users could not be retrieved because an unexpected error occurred'],
+      errorType: 'UNEXPECTED',
+      message: 'An error occurred while retrieving users'
+    }
+  }
 
   return {
     success: true,
     data: users,
-    message: 'Users retrieved successfully'
+    message: 'Users retrieved successfully',
+    pagination: {
+      page: Math.floor(skip / limit) + 1,
+      limit,
+      itemCount: count,
+      pageCount: Math.ceil(count / limit)
+    }
   }
 }
 
@@ -30,7 +50,19 @@ async function getUserById(id: number): Promise<ServiceResult<User | null>> {
   }
 
   // Get user
-  const user = await usersRepository.getById(id)
+  let user: User | null
+
+  try {
+    user = await usersRepository.getById(id)
+  } catch {
+    return {
+      success: false,
+      data: null,
+      errors: ['User could not be retrieved because an unexpected error occurred'],
+      errorType: 'UNEXPECTED',
+      message: 'An error occurred while retrieving the user'
+    }
+  }
 
   if (!user) {
     return {
