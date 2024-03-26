@@ -14,7 +14,6 @@ module.exports = {
   ignorePatterns: ['.eslintrc.js'],
   rules: {
     '@typescript-eslint/no-non-null-assertion': 'off',
-    'no-magic-numbers': 'error',
     '@typescript-eslint/naming-convention': [
       'error',
       {
