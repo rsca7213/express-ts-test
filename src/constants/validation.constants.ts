@@ -11,6 +11,18 @@ const USER_LIMITS = {
   PASSWORD_MAX: 320
 }
 
+const PRODUCT_LIMITS = {
+  NAME_MIN: 3,
+  NAME_MAX: 50,
+  DESCRIPTION_MIN: 10,
+  DESCRIPTION_MAX: 1000,
+  PRICE_MIN: 0.01,
+  PRICE_MAX: 1000000,
+  PRICE_PRECISION: 2,
+  QUANTITY_MIN: 0,
+  QUANTITY_MAX: 1000000
+}
+
 export const VALIDATION_RULES = {
   id: Joi.number().integer().positive().required().messages({
     'number.base': 'Id must be a number',
@@ -70,6 +82,52 @@ export const VALIDATION_RULES = {
         'string.max': `Password must be at most ${USER_LIMITS.PASSWORD_MAX} characters long`,
         'string.pattern.base':
           'Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character'
+      })
+  },
+  product: {
+    name: Joi.string()
+      .required()
+      .min(PRODUCT_LIMITS.NAME_MIN)
+      .max(PRODUCT_LIMITS.NAME_MAX)
+      .messages({
+        'string.base': 'Name must be a string',
+        'string.empty': 'Name is required',
+        'string.min': `Name must be at least ${PRODUCT_LIMITS.NAME_MIN} characters long`,
+        'string.max': `Name must be at most ${PRODUCT_LIMITS.NAME_MAX} characters long`
+      }),
+    description: Joi.string()
+      .required()
+      .min(PRODUCT_LIMITS.DESCRIPTION_MIN)
+      .max(PRODUCT_LIMITS.DESCRIPTION_MAX)
+      .messages({
+        'string.base': 'Description must be a string',
+        'string.empty': 'Description is required',
+        'string.min': `Description must be at least ${PRODUCT_LIMITS.DESCRIPTION_MIN} characters long`,
+        'string.max': `Description must be at most ${PRODUCT_LIMITS.DESCRIPTION_MAX} characters long`
+      }),
+    price: Joi.number()
+      .required()
+      .precision(PRODUCT_LIMITS.PRICE_PRECISION)
+      .min(PRODUCT_LIMITS.PRICE_MIN)
+      .max(PRODUCT_LIMITS.PRICE_MAX)
+      .messages({
+        'number.base': 'Price must be a number',
+        'number.empty': 'Price is required',
+        'number.precision': `Price must have at most ${PRODUCT_LIMITS.PRICE_PRECISION} decimal places`,
+        'number.min': `Price must be at least ${PRODUCT_LIMITS.PRICE_MIN}`,
+        'number.max': `Price must be at most ${PRODUCT_LIMITS.PRICE_MAX}`
+      }),
+    quantity: Joi.number()
+      .required()
+      .integer()
+      .min(PRODUCT_LIMITS.QUANTITY_MIN)
+      .max(PRODUCT_LIMITS.QUANTITY_MAX)
+      .messages({
+        'number.base': 'Quantity must be a number',
+        'number.empty': 'Quantity is required',
+        'number.integer': 'Quantity must be an integer',
+        'number.min': `Quantity must be at least ${PRODUCT_LIMITS.QUANTITY_MIN}`,
+        'number.max': `Quantity must be at most ${PRODUCT_LIMITS.QUANTITY_MAX}`
       })
   }
 }
