@@ -4,6 +4,8 @@ import { Order } from '../models/order.model'
 import { ordersRepository } from '../repositories/orders.repository'
 import { productsRepository } from '../repositories/products.repository'
 import { usersRepository } from '../repositories/users.repository'
+import { OrderStatus } from '../types/order.types'
+import { ordersValidator } from '../validators/orders.validator'
 import { productsValidator } from '../validators/products.validator'
 import { sharedValidator } from '../validators/shared.validator'
 
@@ -170,6 +172,12 @@ async function createOrder(
     errors.push(...productsValidator.validateProductQuantity(product.quantity))
   })
 
+  // Verify for duplicated ids
+  const uniqueIds = new Set(products.map(p => p.id))
+  if (uniqueIds.size !== products.length) {
+    errors.push('Duplicate product ids found in the products array')
+  }
+
   if (errors.length) {
     return {
       success: false,
@@ -180,7 +188,7 @@ async function createOrder(
     }
   }
 
-  // initialize products unit price
+  // initialize products unit price and stock
   const productsToOrder = products.map(p => {
     return {
       id: p.id,
@@ -308,10 +316,72 @@ async function deleteOrder(id: number): Promise<ServiceResult<void>> {
   }
 }
 
+async function updateOrderStatus(id: number, status: OrderStatus): Promise<ServiceResult<void>> {
+  // Validation
+  const errors: string[] = [
+    ...sharedValidator.validateId(id),
+    ...ordersValidator.validateOrderStatus(status)
+  ]
+
+  if (errors.length) {
+    return {
+      success: false,
+      data: undefined,
+      errors,
+      errorType: 'VALIDATION',
+      message: 'Order status could not be updated due to validation errors'
+    }
+  }
+
+  // Verify that order exists and that status is different from current status
+  const order = await ordersRepository.getById(id)
+
+  if (!order) {
+    return {
+      success: false,
+      data: undefined,
+      errors: ['Order not found'],
+      errorType: 'NOT_FOUND',
+      message: 'Order status could not be updated due to verification errors'
+    }
+  }
+
+  if (order.status === status) {
+    return {
+      success: false,
+      data: undefined,
+      errors: ['Order status is already set to the specified status'],
+      errorType: 'VALIDATION',
+      message: 'Order status could not be updated due to verification errors'
+    }
+  }
+
+  // Update order status
+  try {
+    await ordersRepository.updateOrderStatusById(id, status)
+    await ordersRepository.updateOrderLastUpdateById(id, new Date())
+  } catch {
+    return {
+      success: false,
+      data: undefined,
+      errors: ['Order status could not be updated because an unexpected error occurred'],
+      errorType: 'UNEXPECTED',
+      message: 'An error occurred while updating order status'
+    }
+  }
+
+  return {
+    success: true,
+    data: undefined,
+    message: 'Order status updated successfully'
+  }
+}
+
 export const ordersService = {
   getAllOrdersForCurrentUser,
   getAllOrdersByUserId,
   getOrderById,
   createOrder,
-  deleteOrder
+  deleteOrder,
+  updateOrderStatus
 }

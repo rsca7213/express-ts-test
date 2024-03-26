@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import { USER_ROLES } from './user-role.constants'
+import { ORDER_STATUS } from './order-status.constants'
 
 const USER_LIMITS = {
   FIRST_NAME_MIN: 3,
@@ -146,6 +147,18 @@ export const VALIDATION_RULES = {
         'number.integer': 'Quantity must be an integer',
         'number.min': `Quantity must be at least ${PRODUCT_LIMITS.QUANTITY_MIN}`,
         'number.max': `Quantity must be at most ${PRODUCT_LIMITS.QUANTITY_MAX}`
+      })
+  },
+  order: {
+    status: Joi.string()
+      .presence('required')
+      .valid(...ORDER_STATUS)
+      .required()
+      .messages({
+        'any.required': 'Status is required',
+        'string.base': 'Status must be a string',
+        'string.empty': 'Status is required',
+        'any.only': `Status must be one of [${ORDER_STATUS.join(', ')}]`
       })
   }
 }

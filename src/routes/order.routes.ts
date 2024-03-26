@@ -18,6 +18,5 @@ orderRouter.get(
   adminOnlyMiddleware,
   ordersController.getAllOrdersByUserId
 )
-orderRouter.put('/:id', adminOnlyMiddleware, ordersController.updateOrder)
 orderRouter.delete('/:id', adminOnlyMiddleware, ordersController.deleteOrder)
 orderRouter.patch('/:id/status', adminOnlyMiddleware, ordersController.updateOrderStatus)

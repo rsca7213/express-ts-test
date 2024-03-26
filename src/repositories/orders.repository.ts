@@ -149,23 +149,6 @@ async function create(order: Omit<Order, 'id'>): Promise<void> {
   })
 }
 
-async function updateById(id: number, order: Omit<Order, 'id'>): Promise<void> {
-  await prisma.order.update({
-    where: {
-      id
-    },
-    data: {
-      userId: order.userId,
-      status: order.status,
-      orderProducts: {
-        create: order.orderProducts
-      },
-      orderDate: order.orderDate,
-      lastUpdate: order.lastUpdate
-    }
-  })
-}
-
 async function removeById(id: number): Promise<void> {
   await prisma.orderProduct.deleteMany({
     where: {
@@ -190,6 +173,17 @@ async function updateOrderStatusById(id: number, status: OrderStatus): Promise<v
   })
 }
 
+async function updateOrderLastUpdateById(id: number, lastUpdate: Date): Promise<void> {
+  await prisma.order.update({
+    where: {
+      id
+    },
+    data: {
+      lastUpdate
+    }
+  })
+}
+
 export const ordersRepository = {
   count,
   countByUserId,
@@ -200,7 +194,7 @@ export const ordersRepository = {
   getById,
   existsById,
   create,
-  updateById,
   removeById,
-  updateOrderStatusById
+  updateOrderStatusById,
+  updateOrderLastUpdateById
 }
