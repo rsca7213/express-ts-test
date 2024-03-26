@@ -2,7 +2,10 @@ import Joi from 'joi'
 import { User } from '../models/user.model'
 import { VALIDATION_RULES } from '../constants/validation.constants'
 
-function validateUserFieldsWithPassword(user: Omit<User, 'id'>, password: string): string[] {
+function validateUserFieldsWithPassword(
+  user: Omit<User, 'id' | 'passwordHash'>,
+  password: string
+): string[] {
   const schema = Joi.object<User & { password: string }>({
     firstName: VALIDATION_RULES.user.firstName,
     lastName: VALIDATION_RULES.user.lastName,
@@ -17,7 +20,7 @@ function validateUserFieldsWithPassword(user: Omit<User, 'id'>, password: string
   return error?.details.map(error => error.message) || []
 }
 
-function validateUserFieldsWithoutPassword(user: Omit<User, 'id'>): string[] {
+function validateUserFieldsWithoutPassword(user: Omit<User, 'id' | 'passwordHash'>): string[] {
   const schema = Joi.object<User>({
     firstName: VALIDATION_RULES.user.firstName,
     lastName: VALIDATION_RULES.user.lastName,

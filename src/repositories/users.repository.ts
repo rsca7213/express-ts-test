@@ -83,13 +83,26 @@ async function existsByEmail(email: string): Promise<boolean> {
   )
 }
 
-async function create(user: User): Promise<void> {
+async function existsByEmailExcludingId(id: number, email: string): Promise<boolean> {
+  return Boolean(
+    await prisma.user.findFirst({
+      where: {
+        id: {
+          not: id
+        },
+        email
+      }
+    })
+  )
+}
+
+async function create(user: Omit<User, 'id'>): Promise<void> {
   await prisma.user.create({
     data: user
   })
 }
 
-async function updateById(id: number, user: User): Promise<void> {
+async function updateById(id: number, user: Omit<User, 'id'>): Promise<void> {
   await prisma.user.update({
     where: {
       id
@@ -114,6 +127,7 @@ export const usersRepository = {
   getByEmail,
   existsById,
   existsByEmail,
+  existsByEmailExcludingId,
   create,
   updateById,
   removeById
