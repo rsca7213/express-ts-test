@@ -36,7 +36,7 @@ export function setupAppConfig(): void {
   const env = process.env.ENV
   const port = process.env.PORT
   const jwtSecret = process.env.JWT_SECRET
-  const jwtExpirationHours = process.env.JWT_EXPIRATION_HOURS
+  const jwtExpirationHours = process.env.JWT_EXPIRES_IN
 
   appConfig.env = env as AppConfig['env']
   appConfig.port = Number(port)

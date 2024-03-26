@@ -1,23 +1,22 @@
 import { NextFunction, Request, Response } from 'express'
-import { HttpCodes } from '../types/http-codes.types'
-
-async function getCurrentAuthUser(req: Request, res: Response, next: NextFunction) {
-  res.status(HttpCodes.NOT_IMPLEMENTED).send()
-  return next()
-}
+import { ApiRequest } from '../interfaces/api/request.interface'
+import { LoginRequestDto } from '../interfaces/dto/auth/login-dto.interface'
+import { authService } from '../services/auth.service'
+import { RegisterUserRequestDto } from '../interfaces/dto/auth/register-user-dto.interface'
 
 async function login(req: Request, res: Response, next: NextFunction) {
-  res.status(HttpCodes.NOT_IMPLEMENTED).send()
-  return next()
+  const body: ApiRequest<LoginRequestDto> = req.body
+  const serviceResult = await authService.login(body.data.email, body.data.password)
+  return next(serviceResult)
 }
 
 async function register(req: Request, res: Response, next: NextFunction) {
-  res.status(HttpCodes.NOT_IMPLEMENTED).send()
-  return next()
+  const body: ApiRequest<RegisterUserRequestDto> = req.body
+  const serviceResult = await authService.registerUser(body.data, body.data.password)
+  return next(serviceResult)
 }
 
 export const authController = {
-  getCurrentAuthUser,
   login,
   register
 }

@@ -34,7 +34,19 @@ function validateUserFieldsWithoutPassword(user: Omit<User, 'id' | 'passwordHash
   return error?.details.map(error => error.message) || []
 }
 
+function validateCredentials(email: string, password: string): string[] {
+  const schema = Joi.object({
+    email: VALIDATION_RULES.user.email,
+    password: VALIDATION_RULES.user.password
+  })
+
+  const { error } = schema.validate({ email, password }, { abortEarly: false, convert: false })
+
+  return error?.details.map(error => error.message) || []
+}
+
 export const usersValidator = {
   validateUserFieldsWithPassword,
-  validateUserFieldsWithoutPassword
+  validateUserFieldsWithoutPassword,
+  validateCredentials
 }
