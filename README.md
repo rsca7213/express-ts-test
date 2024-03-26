@@ -35,7 +35,7 @@ This is a simple example of an Express API written in TypeScript.
 
   `npx prisma migrate dev`
 
-- Seed the database with some initial data (Don't run this command on a production database, as it will create administrative users with default passwords)
+- Seed the database with some initial data (⚠️ Don't run this command on a production database, as it will create administrative users with default passwords)
 
   `npx prisma db seed`
 
