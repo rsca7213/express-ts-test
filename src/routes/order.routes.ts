@@ -1,7 +1,11 @@
 import { Router } from 'express'
 import { ordersController } from '../controllers/orders.controller'
+import { authMiddleware } from '../middlewares/auth.middleware'
 
 export const orderRouter = Router()
+
+// Before route middlewares
+orderRouter.use(authMiddleware)
 
 orderRouter.get('', ordersController.getAllOrders)
 orderRouter.get(':id', ordersController.getOrderById)
