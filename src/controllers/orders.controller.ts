@@ -3,6 +3,9 @@ import { ordersService } from '../services/orders.service'
 import { ApiRequest } from '../interfaces/api/request.interface'
 import { CreateOrderRequestDto } from '../interfaces/dto/orders/create-order-dto.interface'
 import { UpdateOrderStatusRequestDto } from '../interfaces/dto/orders/update-order-status-dto.interface'
+import { GetAllOrdersForCurrentUserResponseDto } from '../interfaces/dto/orders/get-all-orders-for-current-user-dto.interface'
+import { GetOrderResponseDto } from '../interfaces/dto/orders/get-order-dto.interface'
+import { GetAllOrdersForUserResponseDto } from '../interfaces/dto/orders/get-all-orders-for-user-dto.interface'
 
 async function getAllOrdersForCurrentUser(req: Request, res: Response, next: NextFunction) {
   const page = Number(req.query.page)
@@ -10,13 +13,66 @@ async function getAllOrdersForCurrentUser(req: Request, res: Response, next: Nex
   const skip = (page - 1) * limit
   const body: ApiRequest<void> = req.body
   const serviceResult = await ordersService.getAllOrdersForCurrentUser(body.authUser, skip, limit)
-  return next(serviceResult)
+
+  if (!serviceResult.success || !serviceResult.data) return next(serviceResult)
+
+  const response: GetAllOrdersForCurrentUserResponseDto = {
+    orders: serviceResult.data.map(order => {
+      return {
+        id: order.id,
+        lastUpdate: order.lastUpdate,
+        orderDate: order.orderDate,
+        status: order.status,
+        orderProducts: order.orderProducts.map(orderProduct => {
+          return {
+            product: {
+              description: orderProduct.product.description,
+              id: orderProduct.product.id,
+              name: orderProduct.product.name
+            },
+            quantity: orderProduct.quantity,
+            unitPrice: orderProduct.unitPrice
+          }
+        })
+      }
+    })
+  }
+
+  return next({
+    ...serviceResult,
+    data: response
+  })
 }
 
 async function getOrderById(req: Request, res: Response, next: NextFunction) {
   const id = Number(req.params.id)
   const serviceResult = await ordersService.getOrderById(id)
-  return next(serviceResult)
+
+  if (!serviceResult.success || !serviceResult.data) return next(serviceResult)
+
+  const response: GetOrderResponseDto = {
+    id: serviceResult.data.id,
+    lastUpdate: serviceResult.data.lastUpdate,
+    orderDate: serviceResult.data.orderDate,
+    status: serviceResult.data.status,
+    userId: serviceResult.data.userId,
+    orderProducts: serviceResult.data.orderProducts.map(orderProduct => {
+      return {
+        product: {
+          description: orderProduct.product.description,
+          id: orderProduct.product.id,
+          name: orderProduct.product.name
+        },
+        quantity: orderProduct.quantity,
+        unitPrice: orderProduct.unitPrice
+      }
+    })
+  }
+
+  return next({
+    ...serviceResult,
+    data: response
+  })
 }
 
 async function getAllOrdersByUserId(req: Request, res: Response, next: NextFunction) {
@@ -25,7 +81,35 @@ async function getAllOrdersByUserId(req: Request, res: Response, next: NextFunct
   const skip = (page - 1) * limit
   const id = Number(req.params.id)
   const serviceResult = await ordersService.getAllOrdersByUserId(id, skip, limit)
-  return next(serviceResult)
+
+  if (!serviceResult.success || !serviceResult.data) return next(serviceResult)
+
+  const response: GetAllOrdersForUserResponseDto = {
+    orders: serviceResult.data.map(order => {
+      return {
+        id: order.id,
+        lastUpdate: order.lastUpdate,
+        orderDate: order.orderDate,
+        status: order.status,
+        orderProducts: order.orderProducts.map(orderProduct => {
+          return {
+            product: {
+              description: orderProduct.product.description,
+              id: orderProduct.product.id,
+              name: orderProduct.product.name
+            },
+            quantity: orderProduct.quantity,
+            unitPrice: orderProduct.unitPrice
+          }
+        })
+      }
+    })
+  }
+
+  return next({
+    ...serviceResult,
+    data: response
+  })
 }
 
 async function createOrder(req: Request, res: Response, next: NextFunction) {

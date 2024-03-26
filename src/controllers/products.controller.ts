@@ -5,19 +5,44 @@ import { UpdateProductRequestDto } from '../interfaces/dto/products/update-produ
 import { UpdateProductQuantityRequestDto } from '../interfaces/dto/products/update-product-quantity-dto.interface'
 import { UpdateProductPriceRequestDto } from '../interfaces/dto/products/update-product-price-dto.interface'
 import { ApiRequest } from '../interfaces/api/request.interface'
+import { GetAllProductsResponseDto } from '../interfaces/dto/products/get-all-products-dto.interface'
+import { GetProductResponseDto } from '../interfaces/dto/products/get-product-dto.interface'
 
 async function getAllProducts(req: Request, res: Response, next: NextFunction) {
   const page = Number(req.query.page)
   const limit = Number(req.query.limit)
   const skip = (page - 1) * limit
   const serviceResult = await productsService.getAllProducts(skip, limit)
-  return next(serviceResult)
+
+  if (!serviceResult.success || !serviceResult.data) return next(serviceResult)
+
+  const response: GetAllProductsResponseDto = {
+    products: serviceResult.data
+  }
+
+  return next({
+    ...serviceResult,
+    data: response
+  })
 }
 
 async function getProductById(req: Request, res: Response, next: NextFunction) {
   const id = Number(req.params.id)
   const serviceResult = await productsService.getProductById(id)
-  return next(serviceResult)
+
+  if (!serviceResult.success || !serviceResult.data) return next(serviceResult)
+
+  const response: GetProductResponseDto = {
+    name: serviceResult.data.name,
+    description: serviceResult.data.description,
+    price: serviceResult.data.price,
+    quantity: serviceResult.data.quantity
+  }
+
+  return next({
+    ...serviceResult,
+    data: response
+  })
 }
 
 async function createProduct(req: Request, res: Response, next: NextFunction) {
