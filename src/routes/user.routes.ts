@@ -1,9 +1,10 @@
 import { Router } from 'express'
+import { usersController } from '../controllers/users.controller'
 
 export const userRouter = Router()
 
-userRouter.get('', () => {})
-userRouter.get(':id', () => {})
-userRouter.post('', () => {})
-userRouter.put(':id', () => {})
-userRouter.delete(':id', () => {})
+userRouter.get('', usersController.getAllUsers)
+userRouter.get(':id', usersController.getUserById)
+userRouter.post('', usersController.createUser)
+userRouter.put(':id', usersController.updateUser)
+userRouter.delete(':id', usersController.deleteUser)

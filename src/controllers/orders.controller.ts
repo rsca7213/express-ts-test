@@ -10,8 +10,7 @@ async function getOrderById(req: Request, res: Response, next: NextFunction) {
   res.status(HttpCodes.NOT_IMPLEMENTED).send()
   return next()
 }
-
-async function getOrdersByUserId(req: Request, res: Response, next: NextFunction) {
+async function getAllOrdersByUserId(req: Request, res: Response, next: NextFunction) {
   res.status(HttpCodes.NOT_IMPLEMENTED).send()
   return next()
 }
@@ -39,7 +38,7 @@ async function updateOrderStatus(req: Request, res: Response, next: NextFunction
 export const ordersController = {
   getAllOrders,
   getOrderById,
-  getOrdersByUserId,
+  getAllOrdersByUserId,
   createOrder,
   updateOrder,
   deleteOrder,
