@@ -5,3 +5,4 @@ export type ServiceError =
   | 'VALIDATION'
   | 'AUTHENTICATION'
   | 'INSUFFICIENT_ITEMS'
+  | 'CONFLICT'

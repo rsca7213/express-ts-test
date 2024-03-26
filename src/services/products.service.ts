@@ -167,6 +167,19 @@ async function updateProductById(
     }
   }
 
+  // Verify that product does not have active orders
+  const productHasOrders = await productsRepository.productHasOrders(id)
+
+  if (productHasOrders) {
+    return {
+      success: false,
+      data: undefined,
+      errors: ['Product was already ordered and cannot be updated'],
+      errorType: 'CONFLICT',
+      message: 'Product could not be updated due to verification errors'
+    }
+  }
+
   // Verify that product by the same name does not already exist
   const productByNameExists = await productsRepository.existsByNameExcludingId(id, product.name)
 
@@ -230,6 +243,19 @@ async function deleteProductById(id: number): Promise<ServiceResult<void>> {
       data: undefined,
       errors: ['Product not found'],
       errorType: 'NOT_FOUND',
+      message: 'Product could not be deleted due to verification errors'
+    }
+  }
+
+  // Verify that product does not have active orders
+  const productHasOrders = await productsRepository.productHasOrders(id)
+
+  if (productHasOrders) {
+    return {
+      success: false,
+      data: undefined,
+      errors: ['Product was already ordered and cannot be deleted'],
+      errorType: 'CONFLICT',
       message: 'Product could not be deleted due to verification errors'
     }
   }

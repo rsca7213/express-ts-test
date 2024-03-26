@@ -112,6 +112,19 @@ async function updatePriceById(id: number, price: number): Promise<void> {
   })
 }
 
+async function productHasOrders(id: number): Promise<boolean> {
+  const product = await prisma.product.findUnique({
+    where: {
+      id
+    },
+    include: {
+      orderProduct: true
+    }
+  })
+
+  return Boolean(product?.orderProduct.length)
+}
+
 export const productsRepository = {
   count,
   getAll,
@@ -125,5 +138,6 @@ export const productsRepository = {
   updateById,
   removeById,
   updateQuantityById,
-  updatePriceById
+  updatePriceById,
+  productHasOrders
 }
