@@ -63,6 +63,14 @@ This is a simple example of an Express API written in TypeScript.
 
 - The API will be running on `http://localhost:PORT` where `PORT` is the port number specified in the `.env` file
 
+## 📃 Reading the OpenAPI documentation (Swagger UI)
+
+- To read the OpenAPI documentation, first start the API in development mode
+
+  `npm run start:dev`
+
+- Then, open a browser and navigate to `http://localhost:PORT/docs` where `PORT` is the port number specified in the `.env` file
+
 ## ✅ Linting the code
 
 - Run the linter to check for any linting errors
