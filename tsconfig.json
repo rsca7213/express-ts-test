@@ -7,7 +7,8 @@
     "strict": true,                                      
     "skipLibCheck": true,
     "rootDir": "./src",
-    "outDir": "./dist"  
+    "outDir": "./dist",
+    "resolveJsonModule": true
   },
   "exclude": ["node_modules", "dist", "prisma"]
 }
