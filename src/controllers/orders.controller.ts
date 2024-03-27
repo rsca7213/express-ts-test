@@ -4,7 +4,7 @@ import { ApiRequest } from '../interfaces/api/request.interface'
 import { CreateOrderRequestDto } from '../interfaces/dto/orders/requests/create-order-dto.interface'
 import { UpdateOrderStatusRequestDto } from '../interfaces/dto/orders/requests/update-order-status-dto.interface'
 import { GetAllOrdersForCurrentUserResponseDto } from '../interfaces/dto/orders/responses/get-all-orders-for-current-user-dto.interface'
-import { GetOrderResponseDto } from '../interfaces/dto/orders/requests/get-order-dto.interface'
+import { GetOrderResponseDto } from '../interfaces/dto/orders/responses/get-order-dto.interface'
 import { GetAllOrdersForUserResponseDto } from '../interfaces/dto/orders/responses/get-all-orders-for-user-dto.interface'
 
 async function getAllOrdersForCurrentUser(req: Request, res: Response, next: NextFunction) {
