@@ -2,6 +2,13 @@ name: 'Lint, Build and Test API'
 
 on: [push, pull_request]
 
+env:
+  NODE_ENV: development
+  PORT: 3000
+  DATABASE_URL: postgres://postgres:password@localhost:5432/mydb
+  JWT_SECRET: testsecret
+  JWT_EXPIRES_IN: 24
+
 jobs:
   lint:
     runs-on: ubuntu-latest
