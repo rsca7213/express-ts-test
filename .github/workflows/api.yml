@@ -6,7 +6,7 @@ env:
   ENV: development
   PORT: 3000
   DATABASE_URL: postgres://postgres:password@localhost:5432/mydb
-  JWT_SECRET: testsecret
+  JWT_SECRET: this_is_a_test_secret_value_for_jwt
   JWT_EXPIRES_IN: 24
 
 jobs:
