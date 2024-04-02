@@ -69,6 +69,18 @@ This is a simple example of an Express API written in TypeScript.
 
   `npm run test`
 
+- To only run unit tests
+
+  `npm run test:unit`
+
+- To only run integration tests
+
+  `npm run test:integration`
+
+- To only run end-to-end tests
+
+  `npm run test:e2e`
+
 ## 📃 Reading the OpenAPI documentation (Swagger UI)
 
 - To read the OpenAPI documentation, first start the API in development mode

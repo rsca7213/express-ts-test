@@ -16,7 +16,10 @@
     "start:dev": "nodemon src/server.ts",
     "lint": "eslint \"{src,test}/**/*.ts\"",
     "lint:fix": "eslint --fix \"{src}/**/*.ts\"",
-    "test": "jest --config ./test/jest.config.js"
+    "test": "jest --config ./test/jest.config.js",
+    "test:unit": "jest --config ./test/jest.unit.config.js",
+    "test:integration": "jest --config ./test/jest.integration.config.js",
+    "test:e2e": "jest --config ./test/jest.e2e.config.js"
   },
   "license": "MIT",
   "dependencies": {
