@@ -9,7 +9,7 @@ dotenv.config()
 setupAppConfig()
 
 // Create an Express application
-const app: Application = express()
+export const app: Application = express()
 app.use(express.json())
 
 // Routing
@@ -19,6 +19,6 @@ app.use('/api', router)
 setupSwagger(app)
 
 // Start Express.js Server
-app.listen(appConfig.port, () => {
+export const server = app.listen(appConfig.port, () => {
   console.log(`[Server] Server is running at TCP Port ${appConfig.port}`)
 })
